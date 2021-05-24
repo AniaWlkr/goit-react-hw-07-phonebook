@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styles from './App.module.css';
+import operations from '../../redux/contacts/contacts-operations';
 import ContactForm from '../ContactForm';
 import ContactList from '../ContactList';
 
 class App extends Component {
   componentDidMount() {
-    // const contacts = JSON.parse(localStorage.getItem('contacts'));
-    // if (contacts) this.setState({ contacts });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // if (contacts !== prevState.contacts) {
-    //   localStorage.setItem('contacts', JSON.stringify(contacts));
-    // }
+    this.props.fetchContacts();
   }
 
   render() {
@@ -27,4 +22,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  fetchContacts: () => dispatch(operations.fetchContacts()),
+});
+
+export default connect(null, mapDispatchToProps)(App);

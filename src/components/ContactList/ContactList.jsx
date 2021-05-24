@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
-import actions from '../../redux/contacts/contacts-actions';
+import operations from '../../redux/contacts/contacts-operations';
 import ContactFilter from '../ContactFilter/ContactFilter';
+import Loader from '../Loader';
+import selectors from '../../redux/contacts/contacts-selectors';
 
-const ContactList = ({ contacts, handleDelete }) => (
+const ContactList = ({ contacts, handleDelete, isLoadingContacts }) => (
   <div className={styles.section}>
     <ContactFilter />
+    {isLoadingContacts && <Loader />}
     {contacts.length ? (
       <ul className={styles.list}>
         {contacts.map(contact => (
@@ -49,24 +52,13 @@ ContactList.propTypes = {
   handleDelete: PropTypes.func,
 };
 
-const filteredContacts = (contacts, filter) => {
-  return filter
-    ? contacts.filter(({ name }) =>
-        name.toLowerCase().includes(filter.toLowerCase()),
-      )
-    : contacts;
-};
+const mapStateToProps = state => ({
+  contacts: selectors.getFilteredContacts(state),
+  isLoadingContacts: selectors.getLoading(state),
+});
 
-const mapStateToProps = state => {
-  const { items, filter } = state.contacts;
-  return {
-    contacts: filteredContacts(items, filter),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  handleDelete: contactId => dispatch(operations.deleteContact(contactId)),
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    handleDelete: contactId => dispatch(actions.deleteContact(contactId)),
-  };
-};
 export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

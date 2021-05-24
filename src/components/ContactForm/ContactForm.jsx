@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { v4 } from 'uuid';
+// import { v4 } from 'uuid';
 import styles from './ContactForm.module.css';
-import actions from '../../redux/contacts/contacts-actions';
+import operations from '../../redux/contacts/contacts-operations';
 
 class ContactForm extends Component {
   static propTypes = {
@@ -23,7 +23,7 @@ class ContactForm extends Component {
     event.preventDefault();
 
     const newContact = {
-      id: v4(),
+      // id: v4(),
       name: this.state.name,
       number: this.state.number,
     };
@@ -77,7 +77,7 @@ class ContactForm extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addContact: newContact => dispatch(actions.addContact(newContact)),
+    addContact: newContact => dispatch(operations.addContact(newContact)),
   };
 };
 

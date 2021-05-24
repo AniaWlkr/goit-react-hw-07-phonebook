@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { v4 } from 'uuid';
 import styles from './ContactForm.module.css';
-import operations from '../../redux/contacts/contacts-operations';
+import { operations } from '../../redux/contacts';
 
 class ContactForm extends Component {
   static propTypes = {

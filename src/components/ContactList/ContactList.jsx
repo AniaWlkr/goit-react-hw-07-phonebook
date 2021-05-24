@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
-import operations from '../../redux/contacts/contacts-operations';
 import ContactFilter from '../ContactFilter/ContactFilter';
 import Loader from '../Loader';
-import selectors from '../../redux/contacts/contacts-selectors';
+import { operations, selectors } from '../../redux/contacts';
 
 const ContactList = ({ contacts, handleDelete, isLoadingContacts }) => (
   <div className={styles.section}>

@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './ContactFilter.module.css';
 import { connect } from 'react-redux';
-import { changeFilter } from '../../redux/contacts/contacts-actions';
-import selectors from '../../redux/contacts/contacts-selectors';
+import { changeFilter, selectors } from '../../redux/contacts';
 
 const ContactFilter = ({ value, handleChange }) => {
   return (

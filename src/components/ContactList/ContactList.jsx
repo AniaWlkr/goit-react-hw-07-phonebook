@@ -1,42 +1,49 @@
 import PropTypes from 'prop-types';
+import store from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
+import { operations, selectors } from '../../redux/contacts';
 import ContactFilter from '../ContactFilter/ContactFilter';
 import Loader from '../Loader';
-import { operations, selectors } from '../../redux/contacts';
+import Button from '../Button';
 
-const ContactList = ({ contacts, handleDelete, isLoadingContacts }) => (
-  <div className={styles.section}>
-    <ContactFilter />
-    {isLoadingContacts && <Loader />}
-    {contacts.length ? (
-      <ul className={styles.list}>
-        {contacts.map(contact => (
-          <li key={contact.id} className={styles.item}>
-            {contact.name}: {contact.number}
-            <button
-              type="button"
-              onClick={() => handleDelete(contact.id)}
-              className={styles.button}
-            >
-              Delete{' '}
-              <span role="img" aria-label="delete icon">
-                ❌
-              </span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p className={styles.notification}>
-        <span role="img" aria-label="sad face icon">
-          😔
-        </span>{' '}
-        No name in Phonebook
-      </p>
-    )}
-  </div>
-);
+const ContactList = ({}) => {
+  const state = store.getState();
+
+  const dispatch = useDispatch();
+  const contacts = selectors.getFilteredContacts(state);
+  const isLoadingContacts = useSelector(state => state.contacts.loading);
+
+  const onDelete = id => {
+    console.log('id -', id);
+    dispatch(operations.deleteContact(id));
+  };
+
+  return (
+    <div className={styles.section}>
+      <ContactFilter />
+      {isLoadingContacts && <Loader />}
+      {contacts?.length ? (
+        <ul className={styles.list}>
+          {contacts.map(contact => (
+            <li key={contact.id} className={styles.item}>
+              {contact.name}: {contact.number}
+              <Button title="Delete" handleClick={onDelete} id={contact.id} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.notification}>
+          <span role="img" aria-label="sad face icon">
+            😔
+          </span>{' '}
+          No name in Phonebook
+        </p>
+      )}
+    </div>
+  );
+};
 
 ContactList.propTypes = {
   value: PropTypes.string,
@@ -51,13 +58,13 @@ ContactList.propTypes = {
   handleDelete: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-  contacts: selectors.getFilteredContacts(state),
-  isLoadingContacts: selectors.getLoading(state),
-});
+// const mapStateToProps = state => ({
+//   contacts: selectors.getFilteredContacts(state),
+//   isLoadingContacts: selectors.getLoading(state),
+// });
 
-const mapDispatchToProps = dispatch => ({
-  handleDelete: contactId => dispatch(operations.deleteContact(contactId)),
-});
+export default ContactList;
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
+// const mapDispatchToProps = dispatch => ({
+//   handleDelete: contactId => dispatch(operations.deleteContact(contactId)),
+// });
